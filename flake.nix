@@ -15,7 +15,7 @@
 
         tauri-client = pkgs.stdenv.mkDerivation {
           name = "just-a-chat-app:tauri-client";
-          buildInputs = tauri.packages;
+          buildInputs = tauri.packages ++ (with pkgs; [ bun ]);
           shellHook = tauri.shellHook;
           buildPhase = ''''; # todo
         };
@@ -26,6 +26,8 @@
 
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
+            bun
+            nodejs-slim_22
             cargo
           ] ++ tauri.packages ++ tools;
           shellHook = tauri.shellHook;
