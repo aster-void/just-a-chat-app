@@ -4,7 +4,12 @@
   let name = "";
   let greetMsg = "";
 
-  async function greet() {
+  $: {
+    if (name === "") greetMsg = "";
+    else greet(name);
+  }
+
+  async function greet(name: string) {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsg = await invoke("greet", { name });
   }
@@ -27,7 +32,7 @@
 
   <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
 
-  <form class="row" on:submit|preventDefault={greet}>
+  <form class="row" on:submit|preventDefault={() => greet(name)}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
