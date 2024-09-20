@@ -6,7 +6,7 @@ mod database;
 
 #[launch]
 fn rocket() -> _ {
-    let db = database::init_db();
+    let db = database::init_db(3);
     rocket::build()
         .manage(db)
         .mount("/", routes![root, chat::dm_to, workspace::create_workspace])
