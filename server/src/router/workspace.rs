@@ -1,19 +1,34 @@
 use rocket::form::Form;
 use rocket::http::Status;
-use rocket::post;
 use rocket::serde::json::Json;
 use rocket::State;
+use rocket::{get, post};
 
 use server::*;
 
 use crate::database::{Borrow, Database};
+
+#[get("/workspace")]
+pub async fn list_workspaces(db: &State<Database>) -> Result<Json<Vec<Workspace>>, Status> {
+    let res = sqlx::query_as!(Workspace, "SELECT * FROM workspaces")
+        .fetch_all(db.pool())
+        .await;
+
+    match res {
+        Ok(val) => Ok(Json(val)),
+        Err(err) => {
+            println!("{}", err);
+            Err(Status::InternalServerError)
+        }
+    }
+}
 
 #[post("/workspace", data = "<workspace>")]
 pub async fn create_workspace(
     workspace: Form<InitWorkspace>,
     db: &State<Database>,
 ) -> Result<Json<Workspace>, Status> {
-    let pool = db.borrowed();
+    let pool = db.pool();
     let res = sqlx::query_as!(
         Workspace,
         "INSERT INTO workspaces (name) VALUES ($1) RETURNING *",

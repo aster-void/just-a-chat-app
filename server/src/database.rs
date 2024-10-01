@@ -4,7 +4,7 @@ use sqlx::postgres;
 pub type Database = postgres::PgPool;
 
 pub trait Borrow {
-    fn borrowed(&self) -> &Self {
+    fn pool(&self) -> &Self {
         &self
     }
 }

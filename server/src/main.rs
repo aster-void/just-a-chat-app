@@ -4,6 +4,7 @@ mod router;
 use router::*;
 mod database;
 use dotenvy::dotenv;
+use workspace as ws;
 
 #[launch]
 async fn rocket() -> _ {
@@ -13,9 +14,10 @@ async fn rocket() -> _ {
         .await
         .expect("Failed to initialize database");
 
-    rocket::build()
-        .manage(db)
-        .mount("/", routes![root, chat::dm_to, workspace::create_workspace])
+    rocket::build().manage(db).mount(
+        "/",
+        routes![root, chat::dm_to, ws::create_workspace, ws::list_workspaces],
+    )
 }
 
 #[get("/")]
