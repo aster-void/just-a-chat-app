@@ -1,13 +1,19 @@
-use std::sync::atomic::{AtomicU8, Ordering};
+use anyhow::Result;
+use sqlx::postgres;
 
-pub(crate) struct Database(AtomicU8);
+pub type Database = postgres::PgPool;
 
-impl Database {
-    pub fn obtain(&self) -> u8 {
-        self.0.load(Ordering::Relaxed)
+pub trait Borrow {
+    fn borrowed(&self) -> &Self {
+        &self
     }
 }
+impl Borrow for Database {}
 
-pub fn init_db(init: u8) -> Database {
-    Database(AtomicU8::new(init))
+pub async fn init_db(url: &str, max_conn: u32) -> Result<Database> {
+    let pool = postgres::PgPoolOptions::new()
+        .max_connections(max_conn)
+        .connect(url)
+        .await?;
+    Ok(pool)
 }

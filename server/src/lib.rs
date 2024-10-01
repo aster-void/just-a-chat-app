@@ -3,7 +3,7 @@ use rocket::{serde::Serialize, FromForm};
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Workspace {
-    pub id: String,
+    pub id: i32,
     pub name: String,
 }
 

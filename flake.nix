@@ -29,6 +29,8 @@
             bun
             nodejs-slim_22
             cargo
+            rustc
+            sqlx-cli
           ] ++ tauri.packages ++ tools;
           shellHook = tauri.shellHook;
         };
