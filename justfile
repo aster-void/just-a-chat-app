@@ -22,6 +22,8 @@ serve-web:
 serve-server:
     cd server; cargo run
 
+sync:
+    cd web; bun install
 
 LOCAL_DB := "postgres://user:password@localhost:5432/database"
 
