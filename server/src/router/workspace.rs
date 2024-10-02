@@ -6,7 +6,7 @@ use rocket::{get, post};
 
 use server::*;
 
-use crate::database::{Borrow, Database};
+use crate::database::Database;
 
 #[get("/workspace")]
 pub async fn list_workspaces(db: &State<Database>) -> Result<Json<Vec<Workspace>>, Status> {
@@ -28,13 +28,12 @@ pub async fn create_workspace(
     workspace: Form<InitWorkspace>,
     db: &State<Database>,
 ) -> Result<Json<Workspace>, Status> {
-    let pool = db.pool();
     let res = sqlx::query_as!(
         Workspace,
         "INSERT INTO workspaces (name) VALUES ($1) RETURNING *",
         workspace.name
     )
-    .fetch_one(pool)
+    .fetch_one(db.pool())
     .await;
 
     match res {
