@@ -10,7 +10,7 @@ use std::sync::LazyLock;
 static ALLOW_ORIGINS: LazyLock<Vec<String>> = std::sync::LazyLock::new(|| {
     use std::env::var;
     var("CORS_ALLOW_ORIGIN")
-        .unwrap()
+        .expect("Couldn't find env CORS_ALLOW_ORIGIN")
         .split(",")
         .map(|s| s.to_owned())
         .collect::<Vec<_>>()
