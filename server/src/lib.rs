@@ -1,4 +1,4 @@
-use rocket::{serde::Serialize, FromForm};
+use rocket::{serde::Deserialize, serde::Serialize, FromForm};
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -7,7 +7,8 @@ pub struct Workspace {
     pub name: String,
 }
 
-#[derive(FromForm)]
+#[derive(Deserialize, FromForm)]
+#[serde(crate = "rocket::serde")]
 pub struct InitWorkspace {
     pub name: String,
 }

@@ -2,6 +2,7 @@ use rocket::*;
 
 mod router;
 use router::*;
+mod cors;
 mod database;
 use dotenvy::dotenv;
 use workspace as ws;
@@ -14,9 +15,17 @@ async fn rocket() -> _ {
         .await
         .expect("Failed to initialize database");
 
-    rocket::build().manage(db).mount(
+    rocket::build().attach(cors::Cors()).manage(db).mount(
         "/",
-        routes![root, chat::dm_to, ws::create_workspace, ws::list_workspaces],
+        routes![
+            root,
+            chat::dm_to,
+            ws::list_workspaces,
+            ws::joined_workspaces,
+            ws::get_workspace,
+            ws::create_workspace,
+            cors::handle,
+        ],
     )
 }
 

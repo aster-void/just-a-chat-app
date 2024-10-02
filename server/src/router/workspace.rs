@@ -1,4 +1,3 @@
-use rocket::form::Form;
 use rocket::http::Status;
 use rocket::serde::json::Json;
 use rocket::State;
@@ -16,16 +15,34 @@ pub async fn list_workspaces(db: &State<Database>) -> Result<Json<Vec<Workspace>
 
     match res {
         Ok(val) => Ok(Json(val)),
-        Err(err) => {
-            println!("{}", err);
-            Err(Status::InternalServerError)
-        }
+        Err(_) => Err(Status::InternalServerError),
     }
+}
+
+#[get("/workspace/<id>")]
+pub async fn get_workspace(id: i32, db: &State<Database>) -> Result<Json<Workspace>, Status> {
+    let res = sqlx::query_as!(Workspace, "SELECT * FROM workspaces WHERE id = $1", id)
+        .fetch_one(db.pool())
+        .await;
+
+    match res {
+        Ok(val) => Ok(Json(val)),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
+#[get("/workspace/joined")]
+pub async fn joined_workspaces(db: &State<Database>) -> Result<Json<Vec<Workspace>>, Status> {
+    sqlx::query_as!(Workspace, "SELECT * FROM workspaces")
+        .fetch_all(db.pool())
+        .await
+        .map(|val| Json(val))
+        .map_err(|_| Status::InternalServerError)
 }
 
 #[post("/workspace", data = "<workspace>")]
 pub async fn create_workspace(
-    workspace: Form<InitWorkspace>,
+    workspace: Json<InitWorkspace>,
     db: &State<Database>,
 ) -> Result<Json<Workspace>, Status> {
     let res = sqlx::query_as!(

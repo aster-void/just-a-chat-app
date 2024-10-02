@@ -26,11 +26,16 @@
 
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
+            # compiler + runtime + package manager
             bun
-            nodejs-slim_22
-            cargo
             rustc
+            cargo
+
+            # dev tools
+            just
             sqlx-cli
+            cargo-watch
+            # bacon
           ] ++ tauri.packages ++ tools;
           shellHook = tauri.shellHook;
         };
