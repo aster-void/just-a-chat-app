@@ -1,7 +1,0 @@
-default: watch
-watch:
-    bunx tauri dev
-
-# currently not working
-build:
-    bunx tauri build
