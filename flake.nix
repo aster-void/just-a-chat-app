@@ -4,12 +4,20 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    fenix = {
+      url = "github:nix-community/fenix/monthly";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
+  outputs = { nixpkgs, flake-utils, fenix, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        toolchain = fenix.packages.${system}.fromToolchainFile {
+          file = ./rust-toolchain.toml;
+          sha256 = "sha256-3jVIIf5XPnUU1CRaTyAiO0XHVbJl12MSx3eucTXCjtE=";
+        };
         tauri = import ./nix/tauri.nix { inherit pkgs; };
         tools = import ./nix/tools.nix pkgs;
 
@@ -28,8 +36,7 @@
           buildInputs = with pkgs; [
             # compiler + runtime + package manager
             bun
-            rustc
-            cargo
+            toolchain
 
             # dev tools
             just

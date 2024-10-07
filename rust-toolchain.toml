@@ -1,0 +1,5 @@
+[toolchain]
+channel = "1.80"
+components = ["rustc", "cargo"]
+profile = "default"
+targets = ["aarch64-apple-darwin", "x86_64-unknown-linux-gnu"]
