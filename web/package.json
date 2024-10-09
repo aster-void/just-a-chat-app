@@ -20,6 +20,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"felte": "^1.2.14"
+		"felte": "^1.2.14",
+		"zod": "^3.23.8"
 	}
 }

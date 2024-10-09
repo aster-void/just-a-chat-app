@@ -1,26 +1,21 @@
+import { WorkspaceSchema } from "$lib/schema";
 import type { InitWorkspace, Workspace } from "$lib/types";
-import { api_origin } from "./origin";
+import { z } from "zod";
+import { type Fetcher, GET, POST } from "./internal/fetcher";
 
-export async function publics(): Promise<Workspace[]> {
-	const res = await fetch(`${api_origin}/workspace`);
-	return await res.json();
+const WorkspaceListSchema = z.array(WorkspaceSchema);
+export async function publics(fetch: Fetcher): Promise<Workspace[]> {
+	return await GET(fetch, "/workspace", 200, WorkspaceListSchema);
 }
 
 export async function joined(): Promise<Workspace[]> {
-	const res = await fetch(`${api_origin}/workspace/joined`);
-	return await res.json();
+	return await GET(fetch, "/workspace/joined", 200, WorkspaceListSchema);
 }
 
 export async function create(data: InitWorkspace): Promise<Workspace> {
-	const res = await fetch(`${api_origin}/workspace`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(data),
-	});
-	return await res.json();
+	return await POST(fetch, "/workspace", 201, WorkspaceSchema, data);
 }
 
 export async function get(id: number): Promise<Workspace> {
-	const res = await fetch(`${api_origin}/workspace/${id}`);
-	return await res.json();
+	return await GET(fetch, `/workspace/${id}`, 200, WorkspaceSchema);
 }
