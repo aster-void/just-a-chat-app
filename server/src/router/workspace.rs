@@ -3,7 +3,7 @@ use rocket::serde::json::Json;
 use rocket::State;
 use rocket::{get, post};
 
-use server::*;
+use server::entity::*;
 
 use crate::database::Database;
 

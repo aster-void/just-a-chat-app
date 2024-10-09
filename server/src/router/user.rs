@@ -1,6 +1,6 @@
 use rocket::serde::json::Json;
 use rocket::*;
-use server::{InitUser, User};
+use server::entity::{InitUser, User};
 
 use crate::database::Database;
 
