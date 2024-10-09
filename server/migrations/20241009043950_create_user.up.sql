@@ -1,0 +1,4 @@
+CREATE TABLE users (
+    id SERIAL UNIQUE PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+)
