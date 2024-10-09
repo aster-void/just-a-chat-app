@@ -1,4 +1,5 @@
 use rocket::http::Status;
+use rocket::response::status::Custom;
 use rocket::serde::json::Json;
 use rocket::State;
 use rocket::{get, post};
@@ -44,7 +45,7 @@ pub async fn joined_workspaces(db: &State<Database>) -> Result<Json<Vec<Workspac
 pub async fn create_workspace(
     workspace: Json<InitWorkspace>,
     db: &State<Database>,
-) -> Result<Json<Workspace>, Status> {
+) -> Result<Custom<Json<Workspace>>, Status> {
     let res = sqlx::query_as!(
         Workspace,
         "INSERT INTO workspaces (name) VALUES ($1) RETURNING *",
@@ -58,6 +59,6 @@ pub async fn create_workspace(
             println!("{}", err);
             Err(Status::InternalServerError)
         }
-        Ok(val) => Ok(Json(val)),
+        Ok(val) => Ok(Custom(Status::Created, Json(val))),
     }
 }

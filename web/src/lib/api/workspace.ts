@@ -8,14 +8,17 @@ export async function publics(fetch: Fetcher): Promise<Workspace[]> {
 	return await GET(fetch, "/workspace", 200, WorkspaceListSchema);
 }
 
-export async function joined(): Promise<Workspace[]> {
+export async function joined(fetch: Fetcher): Promise<Workspace[]> {
 	return await GET(fetch, "/workspace/joined", 200, WorkspaceListSchema);
 }
 
-export async function create(data: InitWorkspace): Promise<Workspace> {
+export async function create(
+	fetch: Fetcher,
+	data: InitWorkspace,
+): Promise<Workspace> {
 	return await POST(fetch, "/workspace", 201, WorkspaceSchema, data);
 }
 
-export async function get(id: number): Promise<Workspace> {
+export async function get(fetch: Fetcher, id: number): Promise<Workspace> {
 	return await GET(fetch, `/workspace/${id}`, 200, WorkspaceSchema);
 }

@@ -1,30 +1,10 @@
 <script lang="ts">
-  import * as ws from "$lib/api/workspace";
-  import { page } from "$app/stores";
-  import { onMount } from "svelte";
-  import type { Workspace } from "$lib/types";
+  import type { PageData } from "../$types";
 
-  let workspace: Workspace;
-  let err: Error;
-
-  onMount(() => {
-    ws.get(parseInt($page.params.id))
-      .then((res) => {
-        workspace = res;
-      })
-      .catch((e) => {
-        err = e;
-      });
-  });
+  export let data: PageData;
 </script>
 
 <h2>Workspace</h2>
-{#if err}
-  <p>Something went wrong: {err.message}</p>
-{:else if !workspace}
-  Loading...
-{:else}
-  <p>
-    You are in workspace {workspace.name}
-  </p>
-{/if}
+<p>
+  You are in workspace {data.workspace.name}
+</p>

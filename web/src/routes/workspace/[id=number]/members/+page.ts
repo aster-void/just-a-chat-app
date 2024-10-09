@@ -1,9 +1,9 @@
 import { myData } from "$lib/api/user";
+import type { PageLoad } from "./$types";
 
-/** @type import("./@types").PageLoad **/
-export function load({ param }) {
-	console.log(param.id);
+export const load = (async ({ params }) => {
+	console.log(params.id);
 	return {
-		data: myData,
+		users: [myData],
 	};
-}
+}) satisfies PageLoad;

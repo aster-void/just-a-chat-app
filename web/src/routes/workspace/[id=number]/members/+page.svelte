@@ -3,4 +3,6 @@
   export let data: PageData;
 </script>
 
-<div>Name: {data}</div>
+{#each data.users as user}
+  <div>Name: {user.name}</div>
+{/each}
