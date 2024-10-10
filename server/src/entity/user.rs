@@ -1,4 +1,4 @@
-use rocket::{serde::Deserialize, serde::Serialize};
+use rocket::serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -11,3 +11,5 @@ pub struct User {
     pub id: i32,
     pub name: String,
 }
+
+pub type UserId = i32;

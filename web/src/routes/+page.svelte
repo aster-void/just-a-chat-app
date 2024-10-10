@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import * as workspace from "$lib/api/workspace";
+  import * as ws from "$lib/api/workspace";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -25,7 +25,7 @@
   {#each data.publics as workspace}
     <li>
       {workspace.name}
-      <button on:click={() => alert(`Joined ${workspace.name}`)}> Join </button>
+      <button on:click={() => ws.join(fetch, workspace.id)}> Join </button>
     </li>
   {/each}
 </ul>

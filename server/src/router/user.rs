@@ -1,8 +1,13 @@
 use rocket::serde::json::Json;
 use rocket::*;
-use server::entity::{InitUser, User};
+use server::entity::{AuthenticatedUser, InitUser, User};
 
 use crate::database::Database;
+
+#[post("/login")]
+pub async fn login(auth: AuthenticatedUser) {
+    auth.id();
+}
 
 #[post("/users", data = "<body>")]
 pub async fn create_user(body: Json<InitUser>, db: &State<Database>) -> Json<User> {

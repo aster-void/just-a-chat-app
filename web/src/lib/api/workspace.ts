@@ -1,7 +1,7 @@
 import { WorkspaceSchema } from "$lib/schema";
 import type { InitWorkspace, Workspace } from "$lib/types";
 import { z } from "zod";
-import { type Fetcher, GET, POST } from "./internal/fetcher";
+import { type Fetcher, GET, POST, POST_NO_RES } from "./internal/fetcher";
 
 const WorkspaceListSchema = z.array(WorkspaceSchema);
 export async function publics(fetch: Fetcher): Promise<Workspace[]> {
@@ -21,4 +21,8 @@ export async function create(
 
 export async function get(fetch: Fetcher, id: number): Promise<Workspace> {
 	return await GET(fetch, `/workspace/${id}`, 200, WorkspaceSchema);
+}
+
+export async function join(fetch: Fetcher, id: number): Promise<void> {
+	return await POST_NO_RES(fetch, `/workspace/join/${id}`, 201, {});
 }
