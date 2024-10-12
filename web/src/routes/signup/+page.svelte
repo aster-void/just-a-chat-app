@@ -49,15 +49,16 @@
 
 <NavBar title="Sign Up"></NavBar>
 <main>
-  <pre>{JSON.stringify($errors, null, 2)}</pre>
   <form use:form class="space-y-2">
-    <label class="input input-bordered flex items-center gap-2">
+    <label
+      class="input input-bordered flex items-center gap-2
+      {$errors.name ? 'input-error' : ''}"
+    >
       <Avatar />
       <input
         name="name"
         bind:value={username}
         type="text"
-        class="grow input-bordered {$errors.name ? 'input-error' : ''}"
         placeholder="Username"
         required
         minlength="3"
@@ -65,14 +66,16 @@
       />
     </label>
     {#if $errors.name}
-      <span class="input-error">{$errors.name.join(", ")}</span>
+      <span class="text-red-400 error">{$errors.name.join(", ")}</span>
     {/if}
-    <label class="input input-bordered flex items-center gap-2">
+    <label
+      class="input input-bordered flex items-center gap-2
+        {$errors.rawPassword ? 'input-error' : ''}"
+    >
       <Key />
       <input
         name="rawPassword"
         type="password"
-        class="grow"
         placeholder="Password"
         required
         minlength="8"
@@ -80,7 +83,7 @@
       />
     </label>
     {#if $errors.rawPassword}
-      <span class="red">{$errors.rawPassword.join(", ")}</span>
+      <span class="text-red-400 error">{$errors.rawPassword.join(", ")}</span>
     {/if}
     <button type="submit" class="btn btn-primary w-full" {disabled}>
       Create Account
@@ -89,6 +92,9 @@
 </main>
 
 <style>
+  span.error {
+    flex-wrap: wrap;
+  }
   main {
     flex: 1 1 auto;
     align-content: center;
