@@ -1,41 +1,24 @@
-import { writable } from "svelte/store";
+import { readable, writable } from "svelte/store";
+import { type Result, Err } from "~/lib/result";
 
-type Token = string & {
+export type Token = string & {
 	__INTERNAL_DISALLOW_IMPLICIT_CAST_TO_TOKEN: never;
 };
 
-function createToken(): Token {
-	return "1" as Token; // todo: ,"exp":"${new Date().getTime() / 1000}"}` as Token; // TODO: use actual token
-}
-
-export const tokenStore = writable<Token>(undefined, (set) => {
-	setInterval(() => {
-		set(createToken());
-	});
+// if the user can log in after certain user steps (such as revalidating session or just right in)
+export const canLogIn = readable<boolean>(false, (set) => {
+	set(true);
 });
-export function refreshToken() {
-	tokenStore.set(createToken());
-}
 
-let current: Token;
+export const tokenStore = writable<Token | undefined>(undefined);
+
+export let token: Token | undefined;
 tokenStore.subscribe((val) => {
-	current = val;
+	console.log(val);
+	token = val;
 });
 
-export const token: () => Promise<Token> = () =>
-	new Promise((resolve, reject) => {
-		let done = false;
-		if (current) return resolve(current);
-		const unsub = tokenStore.subscribe((val) => {
-			if (val) {
-				done = true;
-				resolve(val);
-				unsub();
-			}
-		});
-		setTimeout(() => {
-			if (done) return;
-			done = true;
-			reject("Failed to fetch token: Timeout");
-		}, 1000);
-	});
+export async function loginFromStale(): Promise<Result<void>> {
+	// todo!
+	return Err(undefined);
+}

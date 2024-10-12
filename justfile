@@ -13,8 +13,12 @@ watch-server:
 
 start: build
     just serve
-build:
+build: build-web build-server
+build-web:
     cd web; bun run build
+build-server:
+    cd server; cargo build
+
 serve:
     (trap 'kill 0' EXIT; just serve-web & just serve-server & wait)
 serve-web:

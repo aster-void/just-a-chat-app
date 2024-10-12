@@ -2,18 +2,10 @@ use super::UserId;
 use rocket::{
     http::Status,
     request::{FromRequest, Outcome},
-    serde::Deserialize,
 };
 
 #[derive(Clone, Copy)]
 pub struct AuthenticatedUser(UserId);
-
-#[derive(Deserialize)]
-#[serde(crate = "rocket::serde")]
-struct AuthToken {
-    exp: i64,
-    val: i32,
-}
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for AuthenticatedUser {

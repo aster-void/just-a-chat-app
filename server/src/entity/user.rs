@@ -4,6 +4,7 @@ use rocket::serde::{Deserialize, Serialize};
 #[serde(crate = "rocket::serde")]
 pub struct InitUser {
     pub name: String,
+    pub password: String,
 }
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]

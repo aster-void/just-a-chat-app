@@ -1,15 +1,24 @@
-<header>
-  <div class="navbar bg-base-60 border-10 border-base-500">
-    <div class="navbar-start">
-      <a href="/" class="btn btn-ghost text-xl">daisyUI</a>
-    </div>
-    <div class="navbar-end">
-      <slot />
-    </div>
-  </div>
+<script lang="ts">
+  export let title;
+</script>
+
+<header class="w-full navbar bg-base-60 border-10 border-base-500">
+  <span class="navbar-start">
+    <a href="/" class="btn btn-ghost text-xl">daisyUI</a>
+  </span>
+  <span class="navbar-center text-3xl"> {title}</span>
+  <span class="navbar-end">
+    <slot />
+  </span>
 </header>
 
 <style>
+  :global(body) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-height: 100vh;
+  }
   header {
     position: sticky;
     height: 10vh;

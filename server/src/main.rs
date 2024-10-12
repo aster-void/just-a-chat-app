@@ -26,9 +26,10 @@ async fn rocket() -> _ {
             ws::joined_workspaces,
             ws::get_workspace,
             ws::create_workspace,
-            user::login,
-            user::create_user,
+            auth::login,
+            auth::create_user,
             user::all_user,
+            user::user_by_name,
             cors::handle,
         ],
     )

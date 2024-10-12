@@ -117,7 +117,7 @@ pub async fn join_workspace(
 pub async fn members(workspace_id: i32, db: &State<Database>) -> Result<Json<Vec<User>>, Status> {
     let result = sqlx::query_as!(
         User,
-        "SELECT * FROM users WHERE EXISTS
+        "SELECT id, name FROM users WHERE EXISTS
             (SELECT * FROM belongs WHERE belongs.user_id = users.id AND belongs.workspace_id = $1)",
         workspace_id
     )
