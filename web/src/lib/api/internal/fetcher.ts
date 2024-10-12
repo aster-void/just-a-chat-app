@@ -8,8 +8,9 @@ export type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 async function retry(
 	fetch: Fetcher,
 	url: string,
-	init: RequestInit,
+	_init?: RequestInit,
 ): Promise<Response> {
+	const init = _init ?? {};
 	if (token) {
 		init.headers = {
 			"Auth-Token": token,
@@ -29,7 +30,7 @@ export async function GET<T>(
 	status: number,
 	schema: Schema<T>,
 ): Promise<T> {
-	const res = await retry(fetch, `${api_origin}${path}`, {});
+	const res = await retry(fetch, `${api_origin}${path}`);
 	assertEq(res.status, status);
 	const val = await res.json();
 	return schema.parse(val);
@@ -39,7 +40,7 @@ export async function PING_STATUS(
 	fetch: Fetcher,
 	path: string,
 ): Promise<number> {
-	const res = await retry(fetch, `${api_origin}${path}`, {});
+	const res = await retry(fetch, `${api_origin}${path}`);
 	return res.status;
 }
 
