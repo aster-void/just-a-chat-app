@@ -1,4 +1,0 @@
--- Add down migration script here
-ALTER TABLE users DROP COLUMN (
-    bcrypt_pass
-);
