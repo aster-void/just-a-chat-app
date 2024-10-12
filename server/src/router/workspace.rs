@@ -6,30 +6,37 @@ use rocket::{get, post};
 
 use server::entity::*;
 
+use sqlx::{query, query_as};
+
 use crate::database::Database;
 
-#[get("/workspace")]
+#[get("/workspace?<joined>")]
 pub async fn list_workspaces(
+    joined: Option<bool>,
     db: &State<Database>,
     login_state: Option<AuthenticatedUser>,
 ) -> Result<Json<Vec<Workspace>>, Status> {
-    let res = match login_state {
-    None => sqlx::query_as!(Workspace, "SELECT * FROM workspaces")
-        .fetch_all(db.pool())
-        .await,
-    Some(id) => sqlx::query_as!(
-        Workspace,
-        "SELECT * FROM workspaces WHERE NOT EXISTS 
-        (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
-        id.id())
-        .fetch_all(db.pool())
-        .await
-    };
-
-    match res {
-        Ok(val) => Ok(Json(val)),
-        Err(_) => Err(Status::InternalServerError),
+    let pool = db.pool();
+    match (login_state, joined) {
+        (None, _ ) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
+        (_, None) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
+        (Some(user), Some(false))=> 
+            query_as!(Workspace,
+                "SELECT * FROM workspaces WHERE NOT EXISTS 
+                (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
+                user.id()
+            ).fetch_all(pool).await,
+        (Some(user), Some(true)) => 
+            query_as!(Workspace,
+                "SELECT * FROM workspaces WHERE EXISTS
+                (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
+                user.id()
+            ).fetch_all(pool).await,
     }
+    .map(Json).map_err(|err| {
+        eprintln!("router/workspace.rs::list_workspaces - {}", err);
+        Status::InternalServerError
+    })
 }
 
 #[post("/workspace", data = "<workspace>")]
@@ -38,7 +45,7 @@ pub async fn create_workspace(
     db: &State<Database>,
     user: AuthenticatedUser,
 ) -> Result<Custom<Json<Workspace>>, Status> {
-    let create = sqlx::query_as!(
+    let create = query_as!(
         Workspace,
         "INSERT INTO workspaces (name) VALUES ($1) RETURNING *",
         workspace.name,
@@ -52,7 +59,7 @@ pub async fn create_workspace(
             return Err(Status::InternalServerError);
         }
         Ok(ws) => {
-            match sqlx::query!(
+            match query!(
                 "INSERT INTO belongs (workspace_id, user_id) VALUES ($1, $2)",
                 ws.id,
                 user.id()
@@ -76,7 +83,7 @@ pub async fn get_workspace(
     db: &State<Database>,
     auth: AuthenticatedUser,
 ) -> Result<Json<Workspace>, Status> {
-    let res = sqlx::query_as!(
+    let res = query_as!(
         Workspace,
         "SELECT * FROM workspaces WHERE id = $1 AND EXISTS
         (SELECT * FROM belongs WHERE belongs.user_id = $2 AND belongs.workspace_id = workspaces.id)",
@@ -99,7 +106,7 @@ pub async fn join_workspace(
     db: &State<Database>,
     user: AuthenticatedUser,
 ) -> Status {
-    let result = sqlx::query!(
+    let result = query!(
         "INSERT INTO belongs (user_id, workspace_id) VALUES ($1, $2)",
         user.id(),
         workspace_id
@@ -115,7 +122,7 @@ pub async fn join_workspace(
 
 #[get("/workspace/<workspace_id>/members")]
 pub async fn members(workspace_id: i32, db: &State<Database>) -> Result<Json<Vec<User>>, Status> {
-    let result = sqlx::query_as!(
+    let result = query_as!(
         User,
         "SELECT id, name FROM users WHERE EXISTS
             (SELECT * FROM belongs WHERE belongs.user_id = users.id AND belongs.workspace_id = $1)",
@@ -128,20 +135,4 @@ pub async fn members(workspace_id: i32, db: &State<Database>) -> Result<Json<Vec
         Ok(users) => Ok(Json(users)),
         Err(_) => Err(Status::InternalServerError),
     }
-}
-
-#[get("/workspace/joined")]
-pub async fn joined_workspaces(
-    db: &State<Database>,
-    user_id: AuthenticatedUser,
-) -> Result<Json<Vec<Workspace>>, Status> {
-    sqlx::query_as!(Workspace,
-        "SELECT * FROM workspaces WHERE EXISTS
-            (SELECT * FROM belongs WHERE belongs.user_id = $1 AND belongs.workspace_id = workspaces.id)",
-        user_id.id()
-    )
-    .fetch_all(db.pool())
-    .await
-    .map(Json)
-    .map_err(|_| Status::InternalServerError)
 }

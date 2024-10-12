@@ -24,7 +24,6 @@
     async validate(values: unknown) {
       const result = InitUserSchema.safeParse(values);
       if (result.success) return {};
-      console.log(result.error.formErrors.fieldErrors);
       return {
         ...result.error.formErrors.fieldErrors,
       };

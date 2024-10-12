@@ -11,7 +11,7 @@ use crate::database::Database;
 #[serde(crate = "rocket::serde")]
 // TODO: should AuthInfo be password based?
 pub struct AuthInfo {
-    pub username: String,
+    pub name: String,
     pub password: String,
 }
 
@@ -71,7 +71,7 @@ pub async fn login(
     let hash = match sqlx::query_as!(
         PullBcryptHash,
         "SELECT bcrypt_pass FROM users WHERE name = $1",
-        body.username,
+        body.name,
     )
     .fetch_optional(db.pool())
     .await
@@ -91,7 +91,7 @@ pub async fn login(
             let user = sqlx::query_as!(
                 User,
                 "SELECT id, name FROM users WHERE name = $1",
-                body.username
+                body.name
             )
             .fetch_one(db.pool())
             .await

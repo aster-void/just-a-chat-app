@@ -1,9 +1,15 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import * as ws from "$lib/api/workspace";
+  import { tokenStore } from "~/lib/api/internal/token-store";
   import type { PageData } from "./$types";
+  import { onMount } from "svelte";
 
   export let data: PageData;
+
+  onMount(() => {
+    if ($tokenStore === undefined) goto("/login");
+  });
 </script>
 
 <h1>Just a Chat App</h1>

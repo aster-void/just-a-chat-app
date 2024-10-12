@@ -5,11 +5,11 @@ import { type Fetcher, GET, POST, POST_NO_RES } from "./internal/fetcher";
 
 const WorkspaceListSchema = z.array(WorkspaceSchema);
 export async function publics(fetch: Fetcher): Promise<Workspace[]> {
-	return await GET(fetch, "/workspace", 200, WorkspaceListSchema);
+	return await GET(fetch, "/workspace?joined=false", 200, WorkspaceListSchema);
 }
 
 export async function joined(fetch: Fetcher): Promise<Workspace[]> {
-	return await GET(fetch, "/workspace/joined", 200, WorkspaceListSchema);
+	return await GET(fetch, "/workspace?joined=true", 200, WorkspaceListSchema);
 }
 
 export async function create(
