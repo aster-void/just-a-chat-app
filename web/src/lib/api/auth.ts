@@ -4,6 +4,7 @@ import { POST, type Fetcher } from "./internal/fetcher";
 import { z } from "zod";
 import { type Token, tokenStore } from "./internal/token-store";
 import { Err, Ok, type Result } from "../result";
+import { hashPassword } from "../crypto";
 
 const LoginResponseSchema = z.object({
 	token: z.string(),
@@ -15,7 +16,11 @@ export async function signup(
 	data: InitUser,
 ): Promise<Result<User>> {
 	try {
-		const res = await POST(fetch, "/signup", 201, LoginResponseSchema, data);
+		const { rawPassword, ...sendData } = data;
+		const res = await POST(fetch, "/signup", 201, LoginResponseSchema, {
+			...sendData,
+			password: await hashPassword(data.rawPassword),
+		});
 		tokenStore.set(res.token as Token);
 		return Ok(res.user);
 	} catch (err) {
@@ -30,7 +35,11 @@ export async function login(
 	data: InitUser,
 ): Promise<Result<User>> {
 	try {
-		const res = await POST(fetch, "/login", 200, LoginResponseSchema, data);
+		const { rawPassword, ...sendData } = data;
+		const res = await POST(fetch, "/login", 200, LoginResponseSchema, {
+			...sendData,
+			password: await hashPassword(data.rawPassword),
+		});
 		tokenStore.set(res.token as Token);
 		return Ok(res.user);
 	} catch (e) {

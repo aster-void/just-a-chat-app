@@ -4,86 +4,73 @@
   import Key from "~/atoms/svg/Key.svelte";
   import { signup } from "~/lib/api/auth";
   import { createForm } from "felte";
-  import { InitUserSchema, UserNameSchema, UserSchema } from "~/lib/schema";
-  import { hashPassword } from "~/lib/crypto";
+  import { validator } from "@felte/validator-zod";
+  import { InitUserSchema } from "~/lib/schema";
   import { isAvailable } from "~/lib/api/user";
-  import { writable, type Writable } from "svelte/store";
   import { goto } from "$app/navigation";
+  import type { InitUser } from "~/lib/types";
+  import { pushToast } from "~/components/toast/toast.store";
 
-  const { form, errors } = createForm({
-    async onSubmit(values: unknown) {
+  let username: string;
+
+  const { form, errors } = createForm<InitUser>({
+    extend: [validator({ schema: InitUserSchema })],
+    async onSubmit(values) {
       try {
-        const init = InitUserSchema.parse(values);
-        init.password = await hashPassword(init.password);
-        await signup(fetch, init);
-        goto("/home"); // todo
-      } catch (err) {
-        console.error(err);
+        await signup(fetch, values);
+        goto("/home");
+      } catch (err: any) {
+        pushToast(err.message, "error", 2000);
       }
     },
-    async validate(values: unknown) {
-      const result = InitUserSchema.safeParse(values);
-      if (result.success) return {};
-      return {
-        ...result.error.formErrors.fieldErrors,
-      };
+    debounced: {
+      timeout: 300,
+      async validate(values) {
+        try {
+          return {
+            name: (await isAvailable(fetch, values.name))
+              ? null
+              : "Name is already taken",
+            rawPassword: null,
+          };
+        } catch (err) {
+          return {
+            name: "Failed to check username availability",
+            rawPassword: null,
+          };
+        }
+      },
     },
   });
 
-  let nameIsAvailable: Writable<"invalid" | "ok" | "no" | "loading" | Error> =
-    writable("invalid");
-  let name: string;
-  function onChangeName(newName: string) {
-    if (!UserNameSchema.safeParse(newName).success) {
-      return nameIsAvailable.set("invalid");
-    }
-    nameIsAvailable.set("loading");
-    isAvailable(fetch, newName)
-      .then((v) => {
-        if (v) {
-          nameIsAvailable.set("ok");
-        } else {
-          nameIsAvailable.set("no");
-        }
-      })
-      .catch((err) => {
-        nameIsAvailable.set(err as Error);
-      });
-  }
+  let disabled = true;
+  $: disabled = !($errors.name === null && $errors.rawPassword === null);
 </script>
 
 <NavBar title="Sign Up"></NavBar>
 <main>
+  <pre>{JSON.stringify($errors, null, 2)}</pre>
   <form use:form class="space-y-2">
     <label class="input input-bordered flex items-center gap-2">
       <Avatar />
       <input
         name="name"
-        bind:value={name}
-        on:input={() => onChangeName(name)}
+        bind:value={username}
         type="text"
-        class="grow"
+        class="grow input-bordered {$errors.name ? 'input-error' : ''}"
         placeholder="Username"
         required
         minlength="3"
         maxlength="255"
       />
     </label>
-    {#if $nameIsAvailable === "invalid"}
-      <span></span>
-    {:else if $nameIsAvailable === "loading"}
-      <span> Checking name availability...</span>
-    {:else if $nameIsAvailable === "ok"}
-      <span>Name is available</span>
-    {:else if $nameIsAvailable === "no"}
-      <span>Name is not available</span>
-    {:else}
-      <span>Failed to check name availability: {$nameIsAvailable.message}</span>
+    {#if $errors.name}
+      <span class="input-error">{$errors.name.join(", ")}</span>
     {/if}
     <label class="input input-bordered flex items-center gap-2">
       <Key />
       <input
-        name="password"
+        name="rawPassword"
         type="password"
         class="grow"
         placeholder="Password"
@@ -92,11 +79,10 @@
         maxlength="255"
       />
     </label>
-    <button
-      type="submit"
-      class="btn btn-primary w-full"
-      disabled={!($nameIsAvailable === "ok" && name.length >= 3)}
-    >
+    {#if $errors.rawPassword}
+      <span class="red">{$errors.rawPassword.join(", ")}</span>
+    {/if}
+    <button type="submit" class="btn btn-primary w-full" {disabled}>
       Create Account
     </button>
   </form>

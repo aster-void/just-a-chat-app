@@ -17,5 +17,5 @@ export const UserSchema = z.object({
 });
 export const InitUserSchema = z.object({
 	name: UserNameSchema,
-	password: PasswordSchema,
+	rawPassword: PasswordSchema,
 });
