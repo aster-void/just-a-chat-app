@@ -18,11 +18,12 @@ pub async fn list_workspaces(
 ) -> Result<Json<Vec<Workspace>>, Status> {
     let pool = db.pool();
     match (login_state, joined) {
-        (None, _ ) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
+        (None, Some(false)) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
+        (None, Some(true)) => Ok(Vec::new()), // a user who's not logged in does not belong to any workspace
         (_, None) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
         (Some(user), Some(false))=> 
             query_as!(Workspace,
-                "SELECT * FROM workspaces WHERE NOT EXISTS 
+                "SELECT * FROM workspaces WHERE NOT EXISTS
                 (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
                 user.id()
             ).fetch_all(pool).await,
