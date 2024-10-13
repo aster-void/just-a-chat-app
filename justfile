@@ -39,4 +39,5 @@ dev-db:
     done
     cd server; sqlx mig run
 drop-db:
+    cd server; sqlx mig revert || echo 'WARNING: Failed to revert sqlx migration'
     docker kill postgres
