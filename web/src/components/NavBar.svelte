@@ -13,11 +13,6 @@
 </header>
 
 <style>
-  :global(body) {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
   header {
     position: sticky;
     height: 10vh;

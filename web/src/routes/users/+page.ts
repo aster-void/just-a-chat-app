@@ -1,6 +1,6 @@
-import * as api from "$lib/api/user";
-import type { PageLoad } from "../workspace/[id=number]/members/$types";
+import * as user from "$lib/api/user";
+import type { PageLoad } from "./$types";
 
 export const load = (async ({ fetch }) => ({
-	users: await api.all(fetch),
+	users: await user.all(fetch),
 })) satisfies PageLoad;

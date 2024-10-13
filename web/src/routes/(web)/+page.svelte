@@ -1,6 +1,6 @@
 <script lang="ts">
   import { canLogIn } from "~/lib/api/internal/token-store";
-  import NavBar from "../components/NavBar.svelte";
+  import NavBar from "../../components/NavBar.svelte";
 </script>
 
 <NavBar title="">

@@ -19,11 +19,11 @@
   {#each data.joined as workspace}
     <li>
       {workspace.name}
-      <button on:click={() => goto(`/workspace/${workspace.id}`)}>Go</button>
+      <button on:click={() => goto(`/app/w/${workspace.id}`)}>Go</button>
     </li>
   {/each}
 </ul>
-<button on:click={() => goto("/workspace/create")}> Create New </button>
+<button on:click={() => goto("/app/workspace/create")}> Create New </button>
 <hr />
 
 <h2>Public Workspaces</h2>

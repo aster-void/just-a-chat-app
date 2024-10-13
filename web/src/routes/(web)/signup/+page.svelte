@@ -47,7 +47,6 @@
   $: disabled = !($errors.name === null && $errors.rawPassword === null);
 </script>
 
-<NavBar title="Sign Up"></NavBar>
 <main>
   <form use:form class="space-y-2">
     <label

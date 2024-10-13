@@ -3,6 +3,7 @@
   import Avatar from "~/atoms/svg/Avatar.svelte";
   import Key from "~/atoms/svg/Key.svelte";
   import NavBar from "~/components/NavBar.svelte";
+  import { pushToast } from "~/components/toast/toast.store";
   import { login } from "~/lib/api/auth";
   import { hashPassword } from "~/lib/crypto";
 
@@ -11,12 +12,13 @@
   async function onclick() {
     const authInfo = {
       name,
-      password: await hashPassword(password),
+      rawPassword: await hashPassword(password),
     };
 
     const res = await login(fetch, authInfo);
     if (!res.ok) {
-      // TODO: warn that user couldn't log in
+      console.error(res.err);
+      pushToast("Sorry, failed to log in", "error", 2000);
       return;
     }
     console.log("successfully logged in as", res.val);
@@ -24,7 +26,6 @@
   }
 </script>
 
-<NavBar title="Log In"></NavBar>
 <main>
   <form class="space-y-2">
     <label class="input input-bordered flex items-center gap-2">
