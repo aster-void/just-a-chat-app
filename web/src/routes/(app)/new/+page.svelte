@@ -5,8 +5,8 @@
 
   const { form } = createForm({
     async onSubmit(values) {
-      const res = await ws.create(fetch, values);
-      goto(`/workspace/${res.id}`);
+      const workspace = await ws.create(fetch, values);
+      goto(`/w/${workspace.id}`);
     },
   });
 </script>
