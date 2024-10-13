@@ -4,6 +4,7 @@
   import Key from "~/atoms/svg/Key.svelte";
   import { pushToast } from "~/components/toast/toast.store";
   import { login } from "~/lib/api/auth";
+  import { leftOff } from "~/lib/api/internal/token-store";
 
   let name: string;
   let password: string;
@@ -20,7 +21,7 @@
       return;
     }
     console.log("successfully logged in as", res.val);
-    goto("/home");
+    goto($leftOff ?? "/home");
   }
 </script>
 

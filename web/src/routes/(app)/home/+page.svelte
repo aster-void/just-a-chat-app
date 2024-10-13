@@ -1,14 +1,14 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import * as ws from "$lib/api/workspace";
-  import { tokenStore } from "~/lib/api/internal/token-store";
+  import { gotoLoginPage, tokenStore } from "~/lib/api/internal/token-store";
   import type { PageData } from "./$types";
   import { onMount } from "svelte";
 
   export let data: PageData;
 
   onMount(() => {
-    if ($tokenStore === undefined) goto("/login");
+    if ($tokenStore === undefined) gotoLoginPage();
   });
 </script>
 
@@ -31,7 +31,15 @@
   {#each data.publics as workspace}
     <li>
       {workspace.name}
-      <button on:click={() => ws.join(fetch, workspace.id)}> Join </button>
+      <button
+        on:click={() =>
+          ws
+            .join(fetch, workspace.id)
+            .then(() => goto(`/w/${workspace.id}`))
+            .catch(console.error)}
+      >
+        Join
+      </button>
     </li>
   {/each}
 </ul>

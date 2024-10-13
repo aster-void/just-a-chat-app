@@ -19,7 +19,7 @@ export async function signup(
 		const { rawPassword, ...sendData } = data;
 		const res = await POST(fetch, "/signup", 201, LoginResponseSchema, {
 			...sendData,
-			password: await hashPassword(data.rawPassword),
+			password: await hashPassword(rawPassword),
 		});
 		tokenStore.set(res.token as Token);
 		return Ok(res.user);
@@ -38,7 +38,7 @@ export async function login(
 		const { rawPassword, ...sendData } = data;
 		const res = await POST(fetch, "/login", 200, LoginResponseSchema, {
 			...sendData,
-			password: await hashPassword(data.rawPassword),
+			password: await hashPassword(rawPassword),
 		});
 		tokenStore.set(res.token as Token);
 		return Ok(res.user);

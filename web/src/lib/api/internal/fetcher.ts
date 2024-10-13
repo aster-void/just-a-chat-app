@@ -1,7 +1,7 @@
 import type { Schema } from "zod";
 import { api_origin } from "./origin";
 import { assertEq } from "./lib";
-import { token } from "./token-store";
+import { gotoLoginPage, loginFromStale, token } from "./token-store";
 
 export type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 
@@ -18,7 +18,16 @@ async function retry(
 		};
 	}
 	let res = await fetch(url, init);
-	if (res.status === 401 || res.status >= 500) {
+	if (res.status === 401) {
+		const result = await loginFromStale();
+		if (result.ok) {
+			res = await fetch(url, init);
+		} else {
+			gotoLoginPage();
+			throw new Error("Failed to log in automatically");
+		}
+	}
+	if (res.status >= 500) {
 		res = await fetch(url, init);
 	}
 	return res;

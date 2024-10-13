@@ -34,7 +34,7 @@ pub async fn list_workspaces(
             ).fetch_all(pool).await,
     }
     .map(Json).map_err(|err| {
-        eprintln!("router/workspace.rs::list_workspaces - {}", err);
+        eprintln!("router/workspace.rs::list_workspaces - {err}");
         Status::InternalServerError
     })
 }
@@ -55,7 +55,7 @@ pub async fn create_workspace(
 
     match create {
         Err(err) => {
-            println!("{}", err);
+            eprintln!("router/workspace.rs::create_workspace - {err}");
             return Err(Status::InternalServerError);
         }
         Ok(ws) => {
@@ -96,7 +96,10 @@ pub async fn get_workspace(
     match res {
         Ok(Some(val)) => Ok(Json(val)),
         Ok(None) => Err(Status::NotFound),
-        Err(_) => Err(Status::InternalServerError),
+        Err(err) => {
+            eprintln!("router/workspace.rs::get_workspace - {err}");
+            Err(Status::InternalServerError)
+        },
     }
 }
 
@@ -115,8 +118,11 @@ pub async fn join_workspace(
     .await;
 
     match result {
-        Err(_) => Status::InternalServerError,
         Ok(_) => Status::Created,
+        Err(err) => {
+            eprintln!("router/workspace.rs::join_workspace - {err}");
+            Status::InternalServerError
+        },
     }
 }
 
