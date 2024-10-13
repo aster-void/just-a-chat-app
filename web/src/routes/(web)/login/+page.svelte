@@ -2,17 +2,15 @@
   import { goto } from "$app/navigation";
   import Avatar from "~/atoms/svg/Avatar.svelte";
   import Key from "~/atoms/svg/Key.svelte";
-  import NavBar from "~/components/NavBar.svelte";
   import { pushToast } from "~/components/toast/toast.store";
   import { login } from "~/lib/api/auth";
-  import { hashPassword } from "~/lib/crypto";
 
   let name: string;
   let password: string;
   async function onclick() {
     const authInfo = {
       name,
-      rawPassword: await hashPassword(password),
+      rawPassword: password,
     };
 
     const res = await login(fetch, authInfo);
