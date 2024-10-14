@@ -1,0 +1,46 @@
+name: JavaScript
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: web
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('web/bun.lockb')}}
+          path: ~/.bun/install/cache
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: just build-web
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('web/bun.lockb')}}
+          path: ~/.bun/install/cache
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('web/bun.lockb')}}
+          path: ~/.bun/install/cache
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+        # todo: install more linters
+      - run: bunx prettier .
