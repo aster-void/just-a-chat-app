@@ -16,8 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - uses: extractions/setup-just@v2
-      - run: just dev-db
       - run: cargo build
       - run: cargo build --release
   test:
@@ -26,8 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - uses: extractions/setup-just@v2
-      - run: just dev-db
       - run: cargo test
         working-directory: server
   lint:
