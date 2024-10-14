@@ -15,10 +15,13 @@ jobs:
       RUSTFLAGS: -D warnings
     steps:
       - uses: actions/checkout@v4
-      - uses: Swatinem/rust-cache@v2
+      - uses: actions/cache@v4
         with:
-          workspace: server -> target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-cache-${{ github.job }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - run: cargo build
       - run: cargo build --release
@@ -27,10 +30,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: Swatinem/rust-cache@v2
+      - uses: actions/cache@v4
         with:
-          workspace: server -> target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-cache-${{ github.job }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rust-lang/setup-rust-toolchain@v1
       - run: cargo test
         working-directory: server
@@ -39,10 +45,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: Swatinem/rust-cache@v2
+      - uses: actions/cache@v4
         with:
-          workspace: server -> target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-cache-${{ github.job }}-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           components: clippy, rustfmt
