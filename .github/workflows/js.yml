@@ -17,6 +17,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('web/bun.lockb')}}
           path: ~/.bun/install/cache
       - uses: oven-sh/setup-bun@v2
+      - uses: extractions/setup-just@v2
       - run: bun install --frozen-lockfile
       - run: just build-web
 

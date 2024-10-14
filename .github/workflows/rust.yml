@@ -3,6 +3,9 @@ on:
   pull_request:
   push:
     branches: [main]
+defaults:
+  run:
+    working-directory: server
 
 jobs:
   build:
@@ -13,6 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: extractions/setup-just@v2
+      - run: just dev-db
       - run: cargo build
       - run: cargo build --release
   test:
@@ -21,6 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: extractions/setup-just@v2
+      - run: just dev-db
       - run: cargo test
         working-directory: server
   lint:
@@ -30,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          components: clippy, Rustfmt
+          components: clippy, rustfmt
 
       - run: cargo clippy
         working-directory: server
