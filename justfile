@@ -7,7 +7,7 @@ precommit:
     cd server; sqlx prepare
 
 check: check-web check-server
-    bunx prettier .
+    bunx prettier . --check
 check-web:
     # nothing for now
 check-server:
