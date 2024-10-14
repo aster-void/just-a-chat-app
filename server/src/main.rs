@@ -19,7 +19,7 @@ async fn rocket() -> _ {
         "/",
         routes![
             root,
-            chat::dm_to,
+            chat::create_channel,
             ws::list_workspaces,
             ws::join_workspace,
             ws::members,

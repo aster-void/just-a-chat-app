@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.89"
 bcrypt = "0.15.1"
+chrono = "0.4.38"
 dotenvy = "0.15.7"
 rocket = { version = "0.5.1", features = ["json"] }
 sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio"] }

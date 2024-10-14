@@ -5,6 +5,7 @@ use rocket::{serde::Deserialize, serde::Serialize, FromForm};
 pub struct Workspace {
     pub id: i32,
     pub name: String,
+    pub public: bool,
 }
 
 #[derive(Deserialize, FromForm)]

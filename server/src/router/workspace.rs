@@ -23,7 +23,7 @@ pub async fn list_workspaces(
         (_, None) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
         (Some(user), Some(false))=>
             query_as!(Workspace,
-                "SELECT * FROM workspaces WHERE NOT EXISTS
+                "SELECT * FROM workspaces WHERE workspaces.public AND NOT EXISTS
                 (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
                 user.id()
             ).fetch_all(pool).await,
