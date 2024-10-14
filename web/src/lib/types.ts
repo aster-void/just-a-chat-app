@@ -1,8 +1,8 @@
 import type {
-	InitWorkspaceSchema,
-	WorkspaceSchema,
-	InitUserSchema,
-	UserSchema,
+  InitWorkspaceSchema,
+  WorkspaceSchema,
+  InitUserSchema,
+  UserSchema,
 } from "./schema";
 import type { z } from "zod";
 

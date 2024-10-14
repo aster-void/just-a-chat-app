@@ -10,19 +10,21 @@
 - Roles ([]Role) -- custom roles.
 
 struct Role |
-  - Name: name of this role
-  - Color: color for this role
-  - Can Invite (bool) -- if someone with this role can invite
-  - Can Delete messages
+
+- Name: name of this role
+- Color: color for this role
+- Can Invite (bool) -- if someone with this role can invite
+- Can Delete messages
 
 ## Channel Configuration
 
 - publicity Publicity -- who the channel is visible to
 
 enum Publicity |
-  - public -- visible to anyone
-  - restricted([]Role) -- restricted to those roles
-  - private -- only invited people can see
+
+- public -- visible to anyone
+- restricted([]Role) -- restricted to those roles
+- private -- only invited people can see
 
 - use E2EE (bool | self => publicity is private)) -- whether to use E2EE.
 
@@ -41,7 +43,8 @@ enum Publicity |
 - auth info -- []AuthInfo
 
 enum AuthInfo |
-  - Firbase ID Token
+
+- Firbase ID Token
 
 ## E2EE
 
@@ -49,5 +52,6 @@ enum AuthInfo |
 - e2ee pub key ([]E2EEKey(pub)) -- one per client, saved server-side
 
 enum E2EEKey |
-  - priv(PRIVATE_KEY)
-  - pub(PUBLIC_KEY)
+
+- priv(PRIVATE_KEY)
+- pub(PUBLIC_KEY)

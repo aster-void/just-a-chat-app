@@ -1,0 +1,3 @@
+flake.lock
+server/target
+web/.svelte-kit

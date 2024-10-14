@@ -27,7 +27,7 @@ serve-server:
     cd server; cargo run
 
 sync:
-    cd web; bun install
+    cd web; bun install --frozen-lockfile
 
 LOCAL_DB := "postgres://user:password@localhost:5432/database"
 
