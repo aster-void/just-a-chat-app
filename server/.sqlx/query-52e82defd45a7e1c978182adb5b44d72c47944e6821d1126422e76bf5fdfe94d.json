@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM workspaces WHERE EXISTS\n                (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "52e82defd45a7e1c978182adb5b44d72c47944e6821d1126422e76bf5fdfe94d"
+}
