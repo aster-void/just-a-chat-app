@@ -2,6 +2,26 @@ default: start
 dev $DATABASE_URL=(LOCAL_DB): dev-db
     just watch
 
+precommit: 
+    # precommit must be kept minimal
+    cd server; sqlx prepare
+
+check: check-web check-server
+    bunx prettier .
+check-web:
+    # nothing for now
+check-server:
+    cd server; cargo check
+    cd server; cargo clippy
+    cd server; cargo fmt --check
+fix: fix-web fix-server
+    bunx prettier . --write
+fix-web:
+    # nothing for now
+fix-server:
+    cd server; cargo fix --allow-staged
+    cd server; cargo clippy --fix --allow-staged
+    cd server; cargo fmt
 
 watch:
     (trap 'kill 0' EXIT; just watch-web & just watch-server & wait)
