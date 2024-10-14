@@ -21,13 +21,13 @@ pub async fn list_workspaces(
         (None, Some(false)) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
         (None, Some(true)) => Ok(Vec::new()), // a user who's not logged in does not belong to any workspace
         (_, None) => query_as!(Workspace, "SELECT * FROM workspaces").fetch_all(pool).await,
-        (Some(user), Some(false))=> 
+        (Some(user), Some(false))=>
             query_as!(Workspace,
                 "SELECT * FROM workspaces WHERE NOT EXISTS
                 (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
                 user.id()
             ).fetch_all(pool).await,
-        (Some(user), Some(true)) => 
+        (Some(user), Some(true)) =>
             query_as!(Workspace,
                 "SELECT * FROM workspaces WHERE EXISTS
                 (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
@@ -57,7 +57,7 @@ pub async fn create_workspace(
     match create {
         Err(err) => {
             eprintln!("router/workspace.rs::create_workspace - {err}");
-            return Err(Status::InternalServerError);
+            Err(Status::InternalServerError)
         }
         Ok(ws) => {
             match query!(
@@ -100,7 +100,7 @@ pub async fn get_workspace(
         Err(err) => {
             eprintln!("router/workspace.rs::get_workspace - {err}");
             Err(Status::InternalServerError)
-        },
+        }
     }
 }
 
@@ -123,7 +123,7 @@ pub async fn join_workspace(
         Err(err) => {
             eprintln!("router/workspace.rs::join_workspace - {err}");
             Status::InternalServerError
-        },
+        }
     }
 }
 
