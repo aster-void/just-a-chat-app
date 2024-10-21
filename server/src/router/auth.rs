@@ -1,5 +1,5 @@
+use response::status::Created;
 use rocket::http::Status;
-use rocket::response::status::Custom;
 use rocket::serde::json::Json;
 use rocket::*;
 use serde::{Deserialize, Serialize};
@@ -21,7 +21,7 @@ const BCRYPT_COST: u32 = bcrypt::DEFAULT_COST;
 pub async fn create_user(
     body: Json<InitUser>,
     db: &State<Database>,
-) -> Result<Custom<Json<User>>, Status> {
+) -> Result<Created<Json<User>>, Status> {
     let bcrypt_pass = match bcrypt::hash(&body.password, BCRYPT_COST) {
         Ok(hash) => hash,
         Err(err) => {
@@ -44,7 +44,7 @@ pub async fn create_user(
     .fetch_one(db.pool())
     .await
     {
-        Ok(val) => Ok(Custom(Status::Created, Json(val))),
+        Ok(val) => Ok(Created::new("").body(Json(val))),
         Err(err) => {
             eprintln!("router/auth.rs::create_user - Failed to create user: {err}");
             Err(Status::InternalServerError)
