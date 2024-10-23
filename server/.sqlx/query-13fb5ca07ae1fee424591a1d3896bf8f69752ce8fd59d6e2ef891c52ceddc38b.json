@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM workspaces WHERE NOT EXISTS\n                (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
+  "query": "SELECT * FROM workspaces WHERE workspaces.public AND NOT EXISTS\n                (SELECT * FROM belongs WHERE belongs.workspace_id = workspaces.id AND belongs.user_id = $1)",
   "describe": {
     "columns": [
       {
@@ -12,6 +12,11 @@
         "ordinal": 1,
         "name": "name",
         "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "public",
+        "type_info": "Bool"
       }
     ],
     "parameters": {
@@ -21,8 +26,9 @@
     },
     "nullable": [
       false,
+      false,
       false
     ]
   },
-  "hash": "b717af5b8c409f699d412eb57d306c4a09625e7f9b3aa80a083675b3117a5c42"
+  "hash": "13fb5ca07ae1fee424591a1d3896bf8f69752ce8fd59d6e2ef891c52ceddc38b"
 }

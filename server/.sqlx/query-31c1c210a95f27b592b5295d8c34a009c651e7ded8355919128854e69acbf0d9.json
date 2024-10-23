@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM workspaces WHERE id = $1 AND EXISTS\n        (SELECT * FROM belongs WHERE belongs.user_id = $2 AND belongs.workspace_id = workspaces.id)",
+  "query": "INSERT INTO channels (name, workspace_id, is_dm) VALUES ($1, $2, false) RETURNING *",
   "describe": {
     "columns": [
       {
@@ -15,21 +15,27 @@
       },
       {
         "ordinal": 2,
-        "name": "public",
+        "name": "workspace_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 3,
+        "name": "is_dm",
         "type_info": "Bool"
       }
     ],
     "parameters": {
       "Left": [
-        "Int4",
+        "Varchar",
         "Int4"
       ]
     },
     "nullable": [
       false,
       false,
+      false,
       false
     ]
   },
-  "hash": "fe4db8d359b3db91f7b53fb755224d374f4c243c1be11952e59648cac4d80ace"
+  "hash": "31c1c210a95f27b592b5295d8c34a009c651e7ded8355919128854e69acbf0d9"
 }

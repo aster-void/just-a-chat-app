@@ -12,12 +12,18 @@
         "ordinal": 1,
         "name": "name",
         "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "public",
+        "type_info": "Bool"
       }
     ],
     "parameters": {
       "Left": []
     },
     "nullable": [
+      false,
       false,
       false
     ]
