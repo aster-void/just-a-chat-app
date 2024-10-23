@@ -4,7 +4,7 @@ import { toasts } from "./toast.store";
 </script>
 
 <!-- ALLOW TAILWIND TO RECOGNIZE DYNAMIC ALERT-{} CLASS, DO NOT DELETE THIS ELEMENT -->
-<div class="alert-success alert-info alert-warning alert-error" hidden />
+<div class="alert-success alert-info alert-warning alert-error" hidden></div>
 
 <div role="alert" class="toast toast-bottom toast-start">
   {#each $toasts as toast (toast.id)}

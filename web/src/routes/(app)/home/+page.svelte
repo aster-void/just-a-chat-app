@@ -5,7 +5,11 @@ import { onMount } from "svelte";
 import { gotoLoginPage, tokenStore } from "~/lib/api/internal/token-store";
 import type { PageData } from "./$types";
 
-export let data: PageData;
+interface Props {
+	data: PageData;
+}
+
+let { data }: Props = $props();
 
 onMount(() => {
 	if ($tokenStore === undefined) gotoLoginPage();
@@ -19,11 +23,11 @@ onMount(() => {
   {#each data.joined as workspace}
     <li>
       {workspace.name}
-      <button on:click={() => goto(`/w/${workspace.id}`)}>Go</button>
+      <button onclick={() => goto(`/w/${workspace.id}`)}>Go</button>
     </li>
   {/each}
 </ul>
-<button on:click={() => goto("/new")}> Create New </button>
+<button onclick={() => goto("/new")}> Create New </button>
 <hr />
 
 <h2>Public Workspaces</h2>
@@ -32,7 +36,7 @@ onMount(() => {
     <li>
       {workspace.name}
       <button
-        on:click={() =>
+        onclick={() =>
           ws
             .join(fetch, workspace.id)
             .then(() => goto(`/w/${workspace.id}`))

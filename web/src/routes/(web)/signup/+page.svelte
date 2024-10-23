@@ -1,4 +1,6 @@
 <script lang="ts">
+import { run } from "svelte/legacy";
+
 import { goto } from "$app/navigation";
 import { validator } from "@felte/validator-zod";
 import { createForm } from "felte";
@@ -11,7 +13,7 @@ import { isAvailable } from "~/lib/api/user";
 import { InitUserSchema } from "~/lib/schema";
 import type { InitUser } from "~/lib/types";
 
-let username: string;
+let username: string = $state();
 
 const { form, errors } = createForm<InitUser>({
 	extend: [validator({ schema: InitUserSchema })],
@@ -43,8 +45,10 @@ const { form, errors } = createForm<InitUser>({
 	},
 });
 
-let disabled = true;
-$: disabled = !($errors.name === null && $errors.rawPassword === null);
+let disabled = $state(true);
+run(() => {
+	disabled = !($errors.name === null && $errors.rawPassword === null);
+});
 </script>
 
 <main>

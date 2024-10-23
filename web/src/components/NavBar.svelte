@@ -1,5 +1,10 @@
 <script lang="ts">
-export let title: string;
+interface Props {
+	title: string;
+	children?: import("svelte").Snippet;
+}
+
+let { title, children }: Props = $props();
 </script>
 
 <header class="w-full navbar bg-base-60 border-10 border-base-500">
@@ -8,7 +13,7 @@ export let title: string;
   </span>
   <span class="navbar-center text-3xl"> {title}</span>
   <span class="navbar-end">
-    <slot />
+    {@render children?.()}
   </span>
 </header>
 

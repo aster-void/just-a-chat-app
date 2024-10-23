@@ -6,8 +6,8 @@ import { pushToast } from "~/components/toast/toast.store";
 import { login } from "~/lib/api/auth";
 import { leftOff } from "~/lib/api/internal/token-store";
 
-let name: string;
-let password: string;
+let name: string = $state();
+let password: string = $state();
 async function onclick() {
 	const authInfo = {
 		name,
@@ -48,7 +48,7 @@ async function onclick() {
         minlength="8"
       />
     </label>
-    <button on:click={onclick} type="submit" class="btn btn-primary w-full">
+    <button {onclick} type="submit" class="btn btn-primary w-full">
       Log In
     </button>
   </form>

@@ -2,6 +2,11 @@
 import { page } from "$app/stores";
 import NavBar from "~/components/NavBar.svelte";
 import { canAutoLogin } from "~/lib/api/internal/token-store";
+interface Props {
+	children?: import("svelte").Snippet;
+}
+
+let { children }: Props = $props();
 
 const titles = new Map<string, string>(
 	Object.entries({
@@ -12,12 +17,13 @@ const titles = new Map<string, string>(
 	}),
 );
 
-$: title =
+let title = $derived(
 	titles.get($page.url.pathname) ??
-	(() => {
-		console.error("Unknown path:", $page.url.pathname);
-		return "";
-	})();
+		(() => {
+			console.error("Unknown path:", $page.url.pathname);
+			return "";
+		})(),
+);
 </script>
 
 <NavBar {title}>
@@ -36,7 +42,7 @@ $: title =
     >
   </span>
 </NavBar>
-<slot />
+{@render children?.()}
 
 <style>
   a {
