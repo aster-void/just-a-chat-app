@@ -1,4 +1,5 @@
 default: start
+# all-in-one script for development.
 dev $DATABASE_URL=(LOCAL_DB): dev-db
     just watch
 
