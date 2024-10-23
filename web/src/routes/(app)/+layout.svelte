@@ -1,5 +1,5 @@
 <script>
-  import Auth from "~/lib/Auth.svelte";
+import Auth from "~/lib/Auth.svelte";
 </script>
 
 <Auth />

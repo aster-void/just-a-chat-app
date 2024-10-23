@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { toasts } from "./toast.store";
-  import { fade } from "svelte/transition";
+import { fade } from "svelte/transition";
+import { toasts } from "./toast.store";
 </script>
 
 <!-- ALLOW TAILWIND TO RECOGNIZE DYNAMIC ALERT-{} CLASS, DO NOT DELETE THIS ELEMENT -->

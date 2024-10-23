@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let title;
+export let title: string;
 </script>
 
 <header class="w-full navbar bg-base-60 border-10 border-base-500">

@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import NavBar from "~/components/NavBar.svelte";
-  import { canAutoLogin } from "~/lib/api/internal/token-store";
+import { page } from "$app/stores";
+import NavBar from "~/components/NavBar.svelte";
+import { canAutoLogin } from "~/lib/api/internal/token-store";
 
-  const titles = new Map<string, string>(
-    Object.entries({
-      "/login": "Log In",
-      "/signup": "Sign Up",
-      "": "",
-      "/": "",
-    }),
-  );
+const titles = new Map<string, string>(
+	Object.entries({
+		"/login": "Log In",
+		"/signup": "Sign Up",
+		"": "",
+		"/": "",
+	}),
+);
 
-  $: title =
-    titles.get($page.url.pathname) ??
-    (() => {
-      console.error("Unknown path:", $page.url.pathname);
-      return "";
-    })();
+$: title =
+	titles.get($page.url.pathname) ??
+	(() => {
+		console.error("Unknown path:", $page.url.pathname);
+		return "";
+	})();
 </script>
 
 <NavBar {title}>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pushToast } from "../../../components/toast/toast.store";
+import { pushToast } from "../../../components/toast/toast.store";
 </script>
 
 <button on:click={() => pushToast("Default", "default", 2000)}>Default</button>
