@@ -21,7 +21,9 @@
 
         devShell = pkgs.mkShell {
           buildInputs = tools ++ tauri.packages ++ [ toolchain ];
-          shellHook = tauri.shellHook;
+          shellHook = tauri.shellHook + ''
+            lefthook install
+          '';
         };
       in
       {
