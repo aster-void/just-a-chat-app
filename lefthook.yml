@@ -1,6 +1,8 @@
 pre-commit:
-  # parallel: true
+  parallel: true
   commands:
     biome:
       glob: "*.{js,ts,jsx,tsx,astro,svelte}"
       run: biome check {staged_files}
+    prepare-sqlx:
+      run: cd server; cargo sqlx prepare; git add .sqlx
