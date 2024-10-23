@@ -22,18 +22,19 @@ pub struct Channel {
     pub is_dm: bool,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct InitMessage {
     pub content: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Message {
     pub id: i32,
     pub content: String,
-    pub posted_at: i64, // DateTime<UTC> encoded as UNIX timestamp
-    pub posted_in: i32, // references Channel(id)
-    pub posted_by: i32, // references User(id)
+    pub posted_at: i64,        // DateTime<UTC> encoded as UNIX timestamp
+    pub posted_chan: i32,      // references Channel(id)
+    pub posted_workspace: i32, // references Workspace(id)
+    pub posted_by: i32,        // references User(id)
 }

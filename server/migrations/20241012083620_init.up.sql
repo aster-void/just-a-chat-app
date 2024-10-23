@@ -30,7 +30,8 @@ CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
     content TEXT NOT NULL,
     posted_at int8 NOT NULL,
-    posted_in int4 NOT NULL REFERENCES channels(id) ON DELETE CASCADE,
+    posted_chan int4 NOT NULL REFERENCES channels(id) ON DELETE CASCADE,
+    posted_workspace int4 NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
     posted_by int4 NOT NULL REFERENCES users(id)
 );
 

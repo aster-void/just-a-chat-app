@@ -1,0 +1,56 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO messages (content, posted_at, posted_chan, posted_workspace, posted_by) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "content",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "posted_at",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 3,
+        "name": "posted_chan",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 4,
+        "name": "posted_workspace",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "posted_by",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Int8",
+        "Int4",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "db5a1bd252836ef6da6cc43ee6fc1653963d6b7b29f30edf1eb83158cf17b130"
+}
