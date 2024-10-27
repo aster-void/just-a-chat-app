@@ -48,8 +48,9 @@ pub async fn create_workspace(
 ) -> Result<Created<Json<Workspace>>, Status> {
     let create = query_as!(
         Workspace,
-        "INSERT INTO workspaces (name) VALUES ($1) RETURNING *",
+        "INSERT INTO workspaces (name, public) VALUES ($1, $2) RETURNING *",
         workspace.name,
+        workspace.public,
     )
     .fetch_one(db.pool())
     .await;
@@ -78,7 +79,7 @@ pub async fn create_workspace(
     }
 }
 
-#[get("/workspace/<workspace_id>")]
+#[get("/<workspace_id>/workspace")]
 pub async fn get_workspace(
     workspace_id: i32,
     db: &State<Database>,

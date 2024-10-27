@@ -19,8 +19,9 @@ impl<'r> FromRequest<'r> for AuthenticatedUser {
         // TODO: actually implement the logic instead of parsing header as i32
         match token.parse::<i32>() {
             Ok(tok) if tok > 0 => Outcome::Success(AuthenticatedUser(tok)),
-            _ => {
-                eprintln!("failed to parse Auth-Token");
+            Ok(_) => Outcome::Error((Status::BadRequest, ())),
+            Err(err) => {
+                eprintln!("failed to parse Auth-Token: {err}");
                 Outcome::Error((Status::BadRequest, ()))
             }
         }

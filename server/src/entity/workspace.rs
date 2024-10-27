@@ -12,4 +12,5 @@ pub struct Workspace {
 #[serde(crate = "rocket::serde")]
 pub struct InitWorkspace {
     pub name: String,
+    pub public: bool,
 }

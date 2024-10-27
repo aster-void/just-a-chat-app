@@ -20,6 +20,7 @@ async fn rocket() -> _ {
         routes![
             root,
             chat::create_channel,
+            chat::list_channels,
             chat::send_message,
             ws::list_workspaces,
             ws::join_workspace,

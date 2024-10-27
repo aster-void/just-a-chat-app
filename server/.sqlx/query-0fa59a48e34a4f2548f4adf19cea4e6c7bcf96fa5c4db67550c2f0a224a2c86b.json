@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO messages (content, posted_at, posted_chan, posted_workspace, posted_by) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+  "query": "INSERT INTO messages (content, posted_at, posted_workspace, posted_chan, posted_by) VALUES ($1, $2, $3, $4, $5) RETURNING *",
   "describe": {
     "columns": [
       {
@@ -52,5 +52,5 @@
       false
     ]
   },
-  "hash": "db5a1bd252836ef6da6cc43ee6fc1653963d6b7b29f30edf1eb83158cf17b130"
+  "hash": "0fa59a48e34a4f2548f4adf19cea4e6c7bcf96fa5c4db67550c2f0a224a2c86b"
 }
