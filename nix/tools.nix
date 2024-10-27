@@ -11,4 +11,5 @@
 
   # dev tools
   just
+  nushell
 ]
