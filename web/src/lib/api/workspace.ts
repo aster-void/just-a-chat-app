@@ -4,25 +4,25 @@ import { z } from "zod";
 import { type Fetcher, GET, POST, POST_NO_RES } from "./internal/fetcher";
 
 const WorkspaceListSchema = z.array(WorkspaceSchema);
-export async function publics(fetch: Fetcher): Promise<Workspace[]> {
-	return await GET(fetch, "/workspace?joined=false", 200, WorkspaceListSchema);
+export function publics(fetch: Fetcher): Promise<Workspace[]> {
+	return GET(fetch, "/workspace?joined=false", 200, WorkspaceListSchema);
 }
 
-export async function joined(fetch: Fetcher): Promise<Workspace[]> {
-	return await GET(fetch, "/workspace?joined=true", 200, WorkspaceListSchema);
+export function joined(fetch: Fetcher): Promise<Workspace[]> {
+	return GET(fetch, "/workspace?joined=true", 200, WorkspaceListSchema);
 }
 
-export async function create(
+export function create(
 	fetch: Fetcher,
 	data: InitWorkspace,
 ): Promise<Workspace> {
-	return await POST(fetch, "/workspace", 201, WorkspaceSchema, data);
+	return POST(fetch, "/workspace", 201, WorkspaceSchema, data);
 }
 
-export async function get(fetch: Fetcher, id: number): Promise<Workspace> {
-	return await GET(fetch, `/workspace/${id}`, 200, WorkspaceSchema);
+export function get(fetch: Fetcher, id: number): Promise<Workspace> {
+	return GET(fetch, `/${id}/workspace`, 200, WorkspaceSchema);
 }
 
-export async function join(fetch: Fetcher, id: number): Promise<void> {
-	return await POST_NO_RES(fetch, `/workspace/join/${id}`, 201, {});
+export function join(fetch: Fetcher, id: number): Promise<void> {
+	return POST_NO_RES(fetch, `/workspace/join/${id}`, 201, {});
 }

@@ -10,7 +10,7 @@ precommit:
 check: check-web check-server
     bunx prettier . --check
 check-web:
-    # nothing for now
+    cd web; bun check
 check-server:
     cd server; cargo check
     cd server; cargo clippy
@@ -28,7 +28,7 @@ watch:
     (trap 'kill 0' EXIT; just watch-web & just watch-server & wait)
 
 watch-web:
-    cd web; bun run watch
+    cd web; while true; do bun run watch; done
 watch-server:
     cd server; cargo-watch --exec run
 

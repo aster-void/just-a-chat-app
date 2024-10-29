@@ -22,6 +22,6 @@ export async function isAvailable(fetch: Fetcher, username: string) {
 
 export const myDataStore: Writable<User | null> = writable(null);
 
-export async function all(fetch: Fetcher) {
-	return await GET(fetch, "/users", 200, UserListSchema);
+export function all(fetch: Fetcher) {
+	return GET(fetch, "/users", 200, UserListSchema);
 }

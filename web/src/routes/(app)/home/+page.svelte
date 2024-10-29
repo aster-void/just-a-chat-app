@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { gotoLoginPage, tokenStore } from "~/lib/api/internal/token-store";
   import type { PageData } from "./$types";
+  import Error from "~/components/Error.svelte";
 
   interface Props {
     data: PageData;
@@ -27,6 +28,8 @@
         <button onclick={() => goto(`/w/${workspace.id}`)}>Go</button>
       </li>
     {/each}
+  {:catch err}
+    <Error {err} />
   {/await}
 </ul>
 <button onclick={() => goto("/new")}> Create New </button>
@@ -49,5 +52,7 @@
         </button>
       </li>
     {/each}
+  {:catch err}
+    <Error {err} />
   {/await}
 </ul>

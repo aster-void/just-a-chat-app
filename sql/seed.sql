@@ -1,6 +1,6 @@
-INSERT INTO workspaces (id, name, public) VALUES
-(1, 'new public workspace', true),
-(2, 'private workspace', false);
+INSERT INTO workspaces (name, public) VALUES
+('new public workspace', true),
+('private workspace', false);
 
 
 INSERT INTO roles (name, workspace_id) VALUES
@@ -9,16 +9,16 @@ INSERT INTO roles (name, workspace_id) VALUES
 ('public ws role', 1),
 ('priv ws role', 2);
 
-INSERT INTO channels (id, name, workspace_id, is_dm) VALUES
-(1, 'pub chan 1', 1, false),
-(2, 'priv chan 1', 2, false),
-(3, 'pub chan 2', 1, false),
-(4, 'priv chan 2', 2, false);
+INSERT INTO channels (name, workspace_id, is_dm) VALUES
+('pub chan 1', 1, false),
+('priv chan 1', 2, false),
+('pub chan 2', 1, false),
+('priv chan 2', 2, false);
 
-INSERT INTO users (id, name, bcrypt_pass) VALUES
+INSERT INTO users (name, bcrypt_pass) VALUES
 -- username's  password is 'password' (without the quotes)
-(1, 'username', '$2b$12$rgCM22eVfRbKia8K4ba0EuU6wDN8f/3H2QmT4xTyk2F/CHp/TLHXC'),
-(2, 'another user', 'cannot not login');
+('username', '$2b$12$rgCM22eVfRbKia8K4ba0EuU6wDN8f/3H2QmT4xTyk2F/CHp/TLHXC'),
+('another user', 'cannot not login');
 
 INSERT INTO messages
 (content, posted_at, posted_chan, posted_workspace, posted_by)

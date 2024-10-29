@@ -21,7 +21,7 @@ const BCRYPT_COST: u32 = bcrypt::DEFAULT_COST;
 pub async fn create_user(
     body: Json<InitUser>,
     db: &State<Database>,
-) -> Result<Created<Json<User>>, Status> {
+) -> Result<Created<Json<LoginResponse>>, Status> {
     let bcrypt_pass = match bcrypt::hash(&body.password, BCRYPT_COST) {
         Ok(hash) => hash,
         Err(err) => {
@@ -44,7 +44,10 @@ pub async fn create_user(
     .fetch_one(db.pool())
     .await
     {
-        Ok(val) => Ok(Created::new("").body(Json(val))),
+        Ok(user) => Ok(Created::new("").body(Json(LoginResponse {
+            token: user.id.to_string(),
+            user,
+        }))),
         Err(err) => {
             eprintln!("router/auth.rs::create_user - Failed to create user: {err}");
             Err(Status::InternalServerError)
