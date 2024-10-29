@@ -1,54 +1,54 @@
 <script lang="ts">
-import { run } from "svelte/legacy";
+  import { run } from "svelte/legacy";
 
-import { goto } from "$app/navigation";
-import { validator } from "@felte/validator-zod";
-import { createForm } from "felte";
-import Avatar from "~/atoms/svg/Avatar.svelte";
-import Key from "~/atoms/svg/Key.svelte";
-import NavBar from "~/components/NavBar.svelte";
-import { pushToast } from "~/components/toast/toast.store";
-import { signup } from "~/lib/api/auth";
-import { isAvailable } from "~/lib/api/user";
-import { InitUserSchema } from "~/lib/schema";
-import type { InitUser } from "~/lib/types";
+  import { goto } from "$app/navigation";
+  import { validator } from "@felte/validator-zod";
+  import { createForm } from "felte";
+  import Avatar from "~/atoms/svg/Avatar.svelte";
+  import Key from "~/atoms/svg/Key.svelte";
+  import NavBar from "~/components/NavBar.svelte";
+  import { pushToast } from "~/components/toast/toast.store";
+  import { signup } from "~/lib/api/auth";
+  import { isAvailable } from "~/lib/api/user";
+  import { InitUserSchema } from "~/lib/schema";
+  import type { InitUser } from "~/lib/types";
 
-let username: string = $state();
+  let username: string = $state("");
 
-const { form, errors } = createForm<InitUser>({
-	extend: [validator({ schema: InitUserSchema })],
-	async onSubmit(values) {
-		try {
-			await signup(fetch, values);
-			goto("/home");
-		} catch (err: unknown) {
-			pushToast((err as Error).message, "error", 2000);
-		}
-	},
-	debounced: {
-		timeout: 300,
-		async validate(values) {
-			try {
-				return {
-					name: (await isAvailable(fetch, values.name))
-						? null
-						: "Name is already taken",
-					rawPassword: null,
-				};
-			} catch (err) {
-				return {
-					name: "Failed to check username availability",
-					rawPassword: null,
-				};
-			}
-		},
-	},
-});
+  const { form, errors } = createForm<InitUser>({
+    extend: [validator({ schema: InitUserSchema })],
+    async onSubmit(values) {
+      try {
+        await signup(fetch, values);
+        goto("/home");
+      } catch (err: unknown) {
+        pushToast((err as Error).message, "error", 2000);
+      }
+    },
+    debounced: {
+      timeout: 300,
+      async validate(values) {
+        try {
+          return {
+            name: (await isAvailable(fetch, values.name))
+              ? null
+              : "Name is already taken",
+            rawPassword: null,
+          };
+        } catch (err) {
+          return {
+            name: "Failed to check username availability",
+            rawPassword: null,
+          };
+        }
+      },
+    },
+  });
 
-let disabled = $state(true);
-run(() => {
-	disabled = !($errors.name === null && $errors.rawPassword === null);
-});
+  let disabled = $state(true);
+  run(() => {
+    disabled = !($errors.name === null && $errors.rawPassword === null);
+  });
 </script>
 
 <main>

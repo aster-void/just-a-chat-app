@@ -1,28 +1,28 @@
 <script lang="ts">
-import { goto } from "$app/navigation";
-import Avatar from "~/atoms/svg/Avatar.svelte";
-import Key from "~/atoms/svg/Key.svelte";
-import { pushToast } from "~/components/toast/toast.store";
-import { login } from "~/lib/api/auth";
-import { leftOff } from "~/lib/api/internal/token-store";
+  import { goto } from "$app/navigation";
+  import Avatar from "~/atoms/svg/Avatar.svelte";
+  import Key from "~/atoms/svg/Key.svelte";
+  import { pushToast } from "~/components/toast/toast.store";
+  import { login } from "~/lib/api/auth";
+  import { leftOff } from "~/lib/api/internal/token-store";
 
-let name: string = $state();
-let password: string = $state();
-async function onclick() {
-	const authInfo = {
-		name,
-		rawPassword: password,
-	};
+  let name: string = $state("");
+  let password: string = $state("");
+  async function onclick() {
+    const authInfo = {
+      name,
+      rawPassword: password,
+    };
 
-	const res = await login(fetch, authInfo);
-	if (!res.ok) {
-		console.error(res.err);
-		pushToast("Sorry, failed to log in", "error", 2000);
-		return;
-	}
-	console.log("successfully logged in as", res.val);
-	goto($leftOff ?? "/home");
-}
+    const res = await login(fetch, authInfo);
+    if (!res.ok) {
+      console.error(res.err);
+      pushToast("Sorry, failed to log in", "error", 2000);
+      return;
+    }
+    console.log("successfully logged in as", res.val);
+    goto($leftOff ?? "/home");
+  }
 </script>
 
 <main>
