@@ -10,5 +10,9 @@
 
 <h2>Workspace</h2>
 <p>
-	You are in workspace {data.workspace.name}
+	{#await data.workspace}
+		loading...
+	{:then workspace}
+		You are in workspace {workspace.name}
+	{/await}
 </p>

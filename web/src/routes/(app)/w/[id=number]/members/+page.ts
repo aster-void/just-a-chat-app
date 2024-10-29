@@ -1,10 +1,10 @@
 import type { User } from "~/lib/types";
 import type { PageLoad } from "./$types";
 
-export const load = (async ({ params }) => {
+export const load = (({ params }) => {
 	params;
 	return {
 		// todo
-		users: [] as User[],
+		users: (async () => [] as User[])(),
 	};
 }) satisfies PageLoad;

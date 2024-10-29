@@ -59,6 +59,8 @@ dev-db:
         sleep 1; \
     done
     cd server; sqlx mig run
+    psql "postgres://user:password@localhost:5432/database" -f sql/seed.sql
+
 drop-db:
     cd server; sqlx mig revert || echo 'WARNING: Failed to revert sqlx migration'
     docker kill postgres

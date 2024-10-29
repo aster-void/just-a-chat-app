@@ -1,9 +1,9 @@
 import * as workspace from "$lib/api/workspace";
 import type { PageLoad } from "./$types";
 
-export const load = (async ({ fetch }) => {
+export const load = (({ fetch }) => {
 	return {
-		joined: await workspace.joined(fetch),
-		publics: await workspace.publics(fetch),
+		joined: workspace.joined(fetch),
+		publics: workspace.publics(fetch),
 	};
 }) satisfies PageLoad;
